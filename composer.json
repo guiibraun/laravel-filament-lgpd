@@ -1,0 +1,44 @@
+{
+    "name": "guiibraun/laravel-filament-lgpd",
+    "type": "library",
+    "description": "LGPD privacy policy and cookie consent management for Laravel, Filament 5, and Inertia.",
+    "keywords": [
+        "laravel",
+        "filament",
+        "filament-plugin",
+        "lgpd",
+        "privacy",
+        "cookies"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Guilherme Braun",
+            "email": "guiabraun@hotmail.com",
+            "role": "Developer"
+        }
+    ],
+    "homepage": "https://github.com/guiibraun/laravel-filament-lgpd",
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^5.0",
+        "filament/forms": "^5.0",
+        "filament/tables": "^5.0",
+        "inertiajs/inertia-laravel": "^3.0",
+        "spatie/laravel-package-tools": "^1.15"
+    },
+    "autoload": {
+        "psr-4": {
+            "Guiibraun\\FilamentLgpd\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Guiibraun\\FilamentLgpd\\FilamentLgpdServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
