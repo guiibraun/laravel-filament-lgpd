@@ -31,7 +31,7 @@ class CookieConsentResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Cookies';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 5;
 
     protected static ?string $slug = 'cookies/registros';
 

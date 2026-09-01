@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Guiibraun\FilamentLgpd\Enums\CookieScriptPosition;
-use Guiibraun\FilamentLgpd\Enums\CookieScriptSourceType;
 
 /**
  * @property int $id
@@ -213,7 +211,6 @@ class CookieBannerVersion extends Model
             ->ordered()
             ->with('category')
             ->get()
-            ->filter(fn (CookieScript $script): bool => $script->category !== null)
             ->map(fn (CookieScript $script): array => [
                 'id' => $script->getKey(),
                 'name' => $script->name,
@@ -221,12 +218,8 @@ class CookieBannerVersion extends Model
                 'purpose' => $script->purpose,
                 'category' => $script->category->slug,
                 'is_required' => $script->category->is_required,
-                'position' => $script->position instanceof CookieScriptPosition
-                    ? $script->position->value
-                    : (string) $script->position,
-                'source_type' => $script->source_type instanceof CookieScriptSourceType
-                    ? $script->source_type->value
-                    : (string) $script->source_type,
+                'position' => $script->position->value,
+                'source_type' => $script->source_type->value,
                 'src' => $script->src,
                 'code' => $script->code,
                 'sort_order' => $script->sort_order,

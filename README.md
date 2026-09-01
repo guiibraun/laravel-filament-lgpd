@@ -161,7 +161,7 @@ Depois de criar ou alterar scripts, publique uma nova versão em `Cookies > Vers
 
 O campo de código aceita somente o conteúdo JavaScript, sem tags `<script>`. A administração desses registros deve ficar protegida pelo acesso normal do painel Filament, pois código inline e URLs externas são conteúdo privilegiado.
 
-Para efetivar o carregamento no frontend, monte o `CookieScriptLoader` do pacote Inertia no mesmo layout persistente do banner. Ele cria os elementos no `head`, no início do `body` ou no final do `body` somente quando a categoria estiver autorizada. Scripts não essenciais não são incluídos no HTML inicial nem carregados pelo Blade.
+Para efetivar o carregamento no frontend, monte o `CookieScriptLoader` do pacote Inertia no mesmo layout persistente do banner. Ele cria os elementos no `head`, no início do `body` ou no final do `body` somente quando a categoria estiver autorizada. Scripts não essenciais não são executados, requisitados ou transformados em elementos `<script>` antes do consentimento; eles não devem ser colocados diretamente no Blade.
 
 ## LGPD
 
