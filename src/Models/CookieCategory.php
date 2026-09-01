@@ -59,6 +59,17 @@ class CookieCategory extends Model
     }
 
     /**
+     * @return HasMany<CookieScript, $this>
+     */
+    public function scripts(): HasMany
+    {
+        /** @var class-string<CookieScript> $scriptClass */
+        $scriptClass = (string) config('filament-lgpd.models.cookie_script', CookieScript::class);
+
+        return $this->hasMany($scriptClass, 'cookie_category_id')->ordered();
+    }
+
+    /**
      * @param  Builder<CookieCategory>  $query
      */
     #[Scope]

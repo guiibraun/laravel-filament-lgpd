@@ -2,7 +2,7 @@
 
 Pacote privado para Laravel e Filament 5 com recursos para política de privacidade, catálogo de cookies, versões do banner e registro das preferências do visitante.
 
-O pacote também expõe os dados necessários para uma aplicação Inertia. A interface Vue pronta fica no pacote [`@guiibraun/inertia-lgpd`](https://github.com/guiibraun/inertia-lgpd).
+O pacote também expõe os dados necessários para uma aplicação Inertia. A interface Vue pronta, incluindo o carregamento condicionado de scripts, fica no pacote [`@guiibraun/inertia-lgpd`](https://github.com/guiibraun/inertia-lgpd).
 
 ## Requisitos
 
@@ -99,7 +99,7 @@ Por padrão, o pacote registra:
 | `GET`  | `/cookies`         | `cookies`         | Catálogo de cookies           |
 | `POST` | `/cookies/consent` | `cookies.consent` | Salvar a escolha do visitante |
 
-O provider também compartilha os props `cookieBanner` e `cookieConsent` com o Inertia. O pacote npm usa esses nomes por padrão.
+O provider também compartilha os props `cookieBanner` e `cookieConsent` com o Inertia. O banner publicado inclui as categorias e os scripts ativos no snapshot. O pacote npm usa esses nomes por padrão.
 
 Se a aplicação já possui suas próprias rotas ou controllers, desative as rotas do pacote para evitar colisões:
 
@@ -142,14 +142,30 @@ Quando `schedule_pruning` está habilitado, o pacote agenda diariamente o comand
 Para usar os componentes Vue prontos, instale o pacote separado:
 
 ```bash
-pnpm add "git+ssh://git@github.com/guiibraun/inertia-lgpd.git#v0.1.1"
+pnpm add "git+ssh://git@github.com/guiibraun/inertia-lgpd.git#v0.1.2"
 ```
 
 Consulte o [README do pacote Inertia](https://github.com/guiibraun/inertia-lgpd) para a montagem do banner, o catálogo e a personalização da interface.
 
+## Scripts de terceiros
+
+O resource `Cookies > Scripts` centraliza os scripts que podem ser usados pelo site. Cada registro possui:
+
+- categoria de consentimento;
+- nome, provedor e finalidade;
+- posição `Head`, `Body — início` ou `Body — final`;
+- fonte por URL externa ou código inline;
+- status ativo e ordem de carregamento.
+
+Depois de criar ou alterar scripts, publique uma nova versão em `Cookies > Versões`. Somente scripts ativos da versão publicada são enviados ao frontend; isso mantém o registro de consentimento vinculado à configuração que estava vigente naquele momento.
+
+O campo de código aceita somente o conteúdo JavaScript, sem tags `<script>`. A administração desses registros deve ficar protegida pelo acesso normal do painel Filament, pois código inline e URLs externas são conteúdo privilegiado.
+
+Para efetivar o carregamento no frontend, monte o `CookieScriptLoader` do pacote Inertia no mesmo layout persistente do banner. Ele cria os elementos no `head`, no início do `body` ou no final do `body` somente quando a categoria estiver autorizada. Scripts não essenciais não são incluídos no HTML inicial nem carregados pelo Blade.
+
 ## LGPD
 
-Este pacote fornece infraestrutura técnica para transparência e registro de preferências. A aplicação ainda precisa definir as finalidades, bases legais, prazos de retenção, textos, controles de acesso, canal do encarregado e a forma de bloquear scripts analíticos ou de marketing até que exista autorização.
+Este pacote fornece infraestrutura técnica para transparência, registro de preferências e carregamento condicionado dos scripts cadastrados. A aplicação ainda precisa definir as finalidades, bases legais, prazos de retenção, textos, controles de acesso, canal do encarregado e validar cada integração com a legislação vigente.
 
 O pacote não constitui aconselhamento jurídico nem garante conformidade por si só. Valide a implementação com a legislação vigente, orientações da ANPD e assessoria especializada.
 

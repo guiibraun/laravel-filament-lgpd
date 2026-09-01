@@ -28,6 +28,7 @@ class FilamentLgpdServiceProvider extends PackageServiceProvider
                 'create_cookie_definitions_table',
                 'create_cookie_banner_versions_table',
                 'add_colors_to_cookie_banner_versions_table',
+                'create_cookie_scripts_table',
                 'create_cookie_consents_table',
             ])
             ->hasCommands([

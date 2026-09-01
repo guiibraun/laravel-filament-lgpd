@@ -4,6 +4,7 @@ use Guiibraun\FilamentLgpd\Models\CookieBannerVersion;
 use Guiibraun\FilamentLgpd\Models\CookieCategory;
 use Guiibraun\FilamentLgpd\Models\CookieConsent;
 use Guiibraun\FilamentLgpd\Models\CookieDefinition;
+use Guiibraun\FilamentLgpd\Models\CookieScript;
 use Guiibraun\FilamentLgpd\Models\PrivacyPolicy;
 
 return [
@@ -26,6 +27,7 @@ return [
         'cookie_definition' => CookieDefinition::class,
         'cookie_banner_version' => CookieBannerVersion::class,
         'cookie_consent' => CookieConsent::class,
+        'cookie_script' => CookieScript::class,
     ],
 
     'cache' => [
