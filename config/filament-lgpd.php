@@ -116,6 +116,7 @@ return [
         'banner' => [
             'headline' => 'Usamos cookies',
             'body' => 'Usamos cookies necessários para o site funcionar. Cookies analíticos e de marketing só são ligados se você permitir. Você pode aceitar, recusar os não necessários ou gerenciar as categorias.',
+            'colors' => CookieBannerVersion::DEFAULT_COLORS,
         ],
     ],
 ];

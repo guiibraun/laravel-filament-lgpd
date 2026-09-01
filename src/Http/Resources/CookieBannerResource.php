@@ -15,7 +15,7 @@ class CookieBannerResource extends JsonResource
     public static $wrap = null;
 
     /**
-     * @return array{id: int, headline: string, body: string, categories: list<array<string, mixed>>}
+     * @return array{id: int, headline: string, body: string, colors: array<string, string>, categories: list<array<string, mixed>>}
      */
     public function toArray(Request $request): array
     {
@@ -23,6 +23,7 @@ class CookieBannerResource extends JsonResource
             'id' => $this->id,
             'headline' => $this->headline,
             'body' => $this->body,
+            'colors' => $this->publishedColors(),
             'categories' => $this->snapshot['categories'] ?? [],
         ];
     }

@@ -14,21 +14,35 @@ use Illuminate\Support\Facades\Cache;
  * @property int $id
  * @property string $headline
  * @property string $body
+ * @property array<string, string>|null $colors
  * @property array<string, mixed>|null $snapshot
  * @property string|null $snapshot_hash
  * @property Carbon|null $published_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
-#[Fillable(['headline', 'body', 'snapshot', 'snapshot_hash', 'published_at'])]
+#[Fillable(['headline', 'body', 'colors', 'snapshot', 'snapshot_hash', 'published_at'])]
 class CookieBannerVersion extends Model
 {
     public const PUBLISHED_CACHE_KEY = 'cookie-banner.published';
 
     /**
+     * @var array<string, string>
+     */
+    public const DEFAULT_COLORS = [
+        'background' => '#ffffff',
+        'foreground' => '#111827',
+        'primary' => '#2563eb',
+        'primary_foreground' => '#ffffff',
+        'border' => '#e5e7eb',
+        'overlay' => '#00000080',
+    ];
+
+    /**
      * @var array<string, mixed>
      */
     protected $attributes = [
+        'colors' => null,
         'snapshot' => null,
         'snapshot_hash' => null,
         'published_at' => null,
@@ -46,6 +60,7 @@ class CookieBannerVersion extends Model
     protected function casts(): array
     {
         return [
+            'colors' => 'array',
             'snapshot' => 'array',
             'published_at' => 'datetime',
         ];
@@ -78,9 +93,14 @@ class CookieBannerVersion extends Model
 
     public function publish(): void
     {
-        $snapshot = self::captureCatalog();
+        $colors = $this->resolvedColors();
+        $snapshot = [
+            ...self::captureCatalog(),
+            'colors' => $colors,
+        ];
 
         $this->forceFill([
+            'colors' => $colors,
             'snapshot' => $snapshot,
             'snapshot_hash' => hash('sha256', (string) json_encode($snapshot)),
             'published_at' => now(),
@@ -90,6 +110,66 @@ class CookieBannerVersion extends Model
     public static function current(): ?self
     {
         return static::query()->published()->latest('published_at')->latest('id')->first();
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public static function defaultColors(): array
+    {
+        $configuredColors = config('filament-lgpd.catalog.banner.colors', self::DEFAULT_COLORS);
+
+        return self::normalizeColors($configuredColors, self::DEFAULT_COLORS);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function resolvedColors(): array
+    {
+        return self::normalizeColors($this->colors, self::defaultColors());
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function publishedColors(): array
+    {
+        $snapshotColors = is_array($this->snapshot)
+            ? ($this->snapshot['colors'] ?? null)
+            : null;
+
+        return self::normalizeColors($snapshotColors, $this->resolvedColors());
+    }
+
+    /**
+     * @param  mixed  $colors
+     * @param  array<string, string>|null  $fallback
+     * @return array<string, string>
+     */
+    public static function normalizeColors(mixed $colors, ?array $fallback = null): array
+    {
+        $fallbackColors = $fallback ?? self::DEFAULT_COLORS;
+        $resolved = [];
+
+        foreach (array_keys(self::DEFAULT_COLORS) as $key) {
+            $value = is_array($colors) ? ($colors[$key] ?? null) : null;
+            $fallbackValue = $fallbackColors[$key] ?? self::DEFAULT_COLORS[$key];
+
+            $resolved[$key] = self::isValidHexColor($value)
+                ? $value
+                : (self::isValidHexColor($fallbackValue)
+                    ? $fallbackValue
+                    : self::DEFAULT_COLORS[$key]);
+        }
+
+        return $resolved;
+    }
+
+    private static function isValidHexColor(mixed $value): bool
+    {
+        return is_string($value)
+            && preg_match('/\A#(?:(?:[0-9a-f]{3}){1,2}|(?:[0-9a-f]{4}){1,2})\z/i', $value) === 1;
     }
 
     /**
