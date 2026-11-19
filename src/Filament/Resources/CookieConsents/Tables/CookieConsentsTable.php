@@ -2,6 +2,7 @@
 
 namespace Guiibraun\FilamentLgpd\Filament\Resources\CookieConsents\Tables;
 
+use Guiibraun\FilamentLgpd\Enums\CookieConsentAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -17,7 +18,8 @@ class CookieConsentsTable
                     ->dateTime('d/m/Y H:i')
                     ->sortable(),
                 TextColumn::make('action')
-                    ->label('Escolha'),
+                    ->label('Escolha')
+                    ->formatStateUsing(fn (CookieConsentAction $state): string => $state->label()),
                 TextColumn::make('source')
                     ->label('Origem'),
                 TextColumn::make('visitor_id')

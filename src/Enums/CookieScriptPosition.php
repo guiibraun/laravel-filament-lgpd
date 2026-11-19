@@ -2,9 +2,7 @@
 
 namespace Guiibraun\FilamentLgpd\Enums;
 
-use Filament\Support\Contracts\HasLabel;
-
-enum CookieScriptPosition: string implements HasLabel
+enum CookieScriptPosition: string
 {
     case Head = 'head';
     case BodyStart = 'body_start';
@@ -19,8 +17,13 @@ enum CookieScriptPosition: string implements HasLabel
         };
     }
 
-    public function getLabel(): string
+    /**
+     * @return array<string, string>
+     */
+    public static function options(): array
     {
-        return $this->label();
+        return collect(self::cases())
+            ->mapWithKeys(fn (self $case): array => [$case->value => $case->label()])
+            ->all();
     }
 }

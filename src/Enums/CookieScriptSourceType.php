@@ -2,9 +2,7 @@
 
 namespace Guiibraun\FilamentLgpd\Enums;
 
-use Filament\Support\Contracts\HasLabel;
-
-enum CookieScriptSourceType: string implements HasLabel
+enum CookieScriptSourceType: string
 {
     case External = 'external';
     case Inline = 'inline';
@@ -17,8 +15,13 @@ enum CookieScriptSourceType: string implements HasLabel
         };
     }
 
-    public function getLabel(): string
+    /**
+     * @return array<string, string>
+     */
+    public static function options(): array
     {
-        return $this->label();
+        return collect(self::cases())
+            ->mapWithKeys(fn (self $case): array => [$case->value => $case->label()])
+            ->all();
     }
 }

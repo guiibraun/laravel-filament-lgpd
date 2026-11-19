@@ -2,9 +2,7 @@
 
 namespace Guiibraun\FilamentLgpd\Enums;
 
-use Filament\Support\Contracts\HasLabel;
-
-enum CookieConsentAction: string implements HasLabel
+enum CookieConsentAction: string
 {
     case AcceptAll = 'accept_all';
     case RejectNonEssential = 'reject_non_essential';
@@ -17,10 +15,5 @@ enum CookieConsentAction: string implements HasLabel
             self::RejectNonEssential => 'Rejeitar não necessários',
             self::Customize => 'Personalizar',
         };
-    }
-
-    public function getLabel(): string
-    {
-        return $this->label();
     }
 }

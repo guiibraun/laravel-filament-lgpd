@@ -1,13 +1,14 @@
 # Laravel Filament LGPD
 
-Pacote privado para Laravel e Filament 5 com recursos para política de privacidade, catálogo de cookies, versões do banner e registro das preferências do visitante.
+Pacote para Laravel (com plugin opcional para Filament 5) com recursos para política de privacidade, catálogo de cookies, versões do banner e registro das preferências do visitante.
 
 O pacote também expõe os dados necessários para uma aplicação Inertia. A interface Vue pronta, incluindo o carregamento condicionado de scripts, fica no pacote [`@guiibraun/inertia-lgpd`](https://github.com/guiibraun/inertia-lgpd).
 
 ## Requisitos
 
 - PHP 8.2 ou superior;
-- uma aplicação Laravel com Filament 5;
+- uma aplicação Laravel 12 ou superior;
+- Filament 5, opcional, apenas para o plugin do painel;
 - `inertiajs/inertia-laravel` 3 ou superior;
 - acesso SSH de leitura ao GitHub para `git@github.com:guiibraun/laravel-filament-lgpd.git`.
 
@@ -51,6 +52,14 @@ O comando publica `config/filament-lgpd.php` e as migrações. Se você não con
 ```bash
 php artisan migrate
 ```
+
+## Uso sem Filament
+
+O Filament é opcional. Sem ele, o pacote continua registrando rotas, props Inertia, models e comandos; a aplicação só precisa do próprio admin para editar os registros.
+
+- `PrivacyPolicy::body` aceita HTML (string). O pacote devolve esse HTML como está, então sanitize na gravação.
+- Nos selects do admin, use `CookieScriptPosition::options()` e `CookieScriptSourceType::options()`.
+- Depois de alterar categorias, definições ou scripts, chame `publish()` em uma nova `CookieBannerVersion` para gerar o snapshot que vai para o front.
 
 ## Registrar o plugin no Filament
 

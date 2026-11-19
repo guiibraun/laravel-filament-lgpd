@@ -2,6 +2,7 @@
 
 namespace Guiibraun\FilamentLgpd\Filament\Resources\CookieConsents\Schemas;
 
+use Guiibraun\FilamentLgpd\Enums\CookieConsentAction;
 use Filament\Infolists\Components\KeyValueEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
@@ -16,7 +17,8 @@ class CookieConsentInfolist
                     ->label('Quando')
                     ->dateTime('d/m/Y H:i'),
                 TextEntry::make('action')
-                    ->label('Escolha'),
+                    ->label('Escolha')
+                    ->formatStateUsing(fn (CookieConsentAction $state): string => $state->label()),
                 TextEntry::make('source')
                     ->label('Origem'),
                 TextEntry::make('visitor_id')

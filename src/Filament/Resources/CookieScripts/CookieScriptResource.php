@@ -73,7 +73,8 @@ class CookieScriptResource extends Resource
                             ->columnSpan(1),
                         Select::make('position')
                             ->label('Posição')
-                            ->options(CookieScriptPosition::class)
+                            ->options(CookieScriptPosition::options())
+                            ->enum(CookieScriptPosition::class)
                             ->required()
                             ->columnSpan(1),
                         TextInput::make('name')
@@ -94,7 +95,8 @@ class CookieScriptResource extends Resource
                             ->columnSpanFull(),
                         Select::make('source_type')
                             ->label('Tipo de fonte')
-                            ->options(CookieScriptSourceType::class)
+                            ->options(CookieScriptSourceType::options())
+                            ->enum(CookieScriptSourceType::class)
                             ->required()
                             ->live()
                             ->afterStateUpdated(function (Set $set, CookieScriptSourceType|string|null $state): void {
@@ -158,9 +160,11 @@ class CookieScriptResource extends Resource
                     ->label('Provedor'),
                 TextColumn::make('position')
                     ->label('Posição')
+                    ->formatStateUsing(fn (CookieScriptPosition $state): string => $state->label())
                     ->badge(),
                 TextColumn::make('source_type')
                     ->label('Fonte')
+                    ->formatStateUsing(fn (CookieScriptSourceType $state): string => $state->label())
                     ->badge(),
                 IconColumn::make('is_active')
                     ->label('Ativo')
