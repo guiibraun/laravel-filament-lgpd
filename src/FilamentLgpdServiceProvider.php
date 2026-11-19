@@ -21,7 +21,6 @@ class FilamentLgpdServiceProvider extends PackageServiceProvider
         $package
             ->name(static::$name)
             ->hasConfigFile()
-            ->hasViews('filament-lgpd')
             ->hasMigrations([
                 'create_privacy_policies_table',
                 'create_cookie_categories_table',
@@ -41,6 +40,11 @@ class FilamentLgpdServiceProvider extends PackageServiceProvider
                     ->publishMigrations()
                     ->askToRunMigrations();
             });
+
+        // The only views are Filament pages; registering them without Filament breaks `php artisan view:cache`.
+        if (class_exists(\Filament\Panel::class)) {
+            $package->hasViews('filament-lgpd');
+        }
 
         if (config('filament-lgpd.routes.enabled', true)) {
             $package->hasRoute('web');
